@@ -99,7 +99,7 @@ jobs:
       - attach_workspace:
           at: workspace1
       - run: |
-          if [[ $(cat workspace1/echo-output) == "Trying out workspace" ]]; then
+          if [[ $(cat workspace1/echo-output) == "Trying out workspaces" ]]; then
             echo "it worked";
           else
             echo "Nope!"; exit 1
