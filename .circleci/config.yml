@@ -46,3 +46,4 @@ jobs:
 
       - store_artifacts:
           path: target/CircleciTest-1.0-SNAPSHOT.jar
+      - run: echo "completed first build"
