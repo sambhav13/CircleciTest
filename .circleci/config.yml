@@ -50,7 +50,7 @@ jobs:
       - run: mkdir -p workspace1
       - run: echo "Trying out workspaces" > workspace1/echo-output
       - persist_to_workspace:
-         root: my_workspace
+         root: workspace1
          paths:
            - echo-output
 
