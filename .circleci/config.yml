@@ -98,7 +98,7 @@ jobs:
       - run: echo "completed third build"
       - attach_workspace:
           at: workspace1
-      -run: |
+      - run: |
           if [[ $(cat workspace1/echo-output == "Trying out workspace" ]]; then
             echo "it worked";
           else
