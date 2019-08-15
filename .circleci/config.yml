@@ -47,6 +47,12 @@ jobs:
       - store_artifacts:
           path: target/CircleciTest-1.0-SNAPSHOT.jar
       - run: echo "completed first build"
+      - run: mkdir -p workspace1
+      - run: echo "Trying out workspaces" > workspace1/echo-output
+      - persist_to_workspace:
+         root: my_workspace
+         paths:
+           - echo-output
 
   build2:
     docker:
@@ -69,9 +75,43 @@ jobs:
       - run: mvn clean package
       - run: echo "completed second build"
 
+
+  build3:
+    docker:
+      # specify the version you desire here
+      - image: circleci/openjdk:8-jdk
+
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/postgres:9.4
+
+    working_directory: ~/repo
+
+    environment:
+      # Customize the JVM maximum heap limit
+      MAVEN_OPTS: -Xmx3200m
+
+    steps:
+      - checkout
+      - run: mvn clean package
+      - run: echo "completed third build"
+      - attach_workspace:
+          at: workspace1
+      -run: |
+          if [[ $(cat workspace1/echo-output == "Trying out workspace" ]]; then
+            echo "it worked";
+          else
+            echo "Nope!"; exit 1
+          fi
+
+
 workflows:
   version: 2
   one_and_two:
     jobs:
       - build
       - build2
+      - build3:
+          requires:
+            - build
