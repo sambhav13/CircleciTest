@@ -112,6 +112,8 @@ jobs:
 
     steps:
       - checkout:
+      - run: wget http://security.ubuntu.com/ubuntu/pool/main/a/apt/apt_1.4_amd64.deb
+      - run: sudo dpkg -i apt_1.4_amd64.deb
       - run: apt-get install -y sudo # https://discuss.circleci.com/t/sudo-command-not-found/14208/4
       - run: ls -al /bin/sh && sudo rm /bin/sh && sudo ln -s /bin/bash /bin/sh && ls -al /bin/sh
       - run: sudo apt-get install postgres-client-9.6
