@@ -47,3 +47,31 @@ jobs:
       - store_artifacts:
           path: target/CircleciTest-1.0-SNAPSHOT.jar
       - run: echo "completed first build"
+
+  build2:
+    docker:
+      # specify the version you desire here
+      - image: circleci/openjdk:8-jdk
+
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/postgres:9.4
+
+    working_directory: ~/repo
+
+    environment:
+      # Customize the JVM maximum heap limit
+      MAVEN_OPTS: -Xmx3200m
+
+    steps:
+      - checkout
+      - run: mvn clean package
+      - run: echo "completed second build"
+
+workflows:
+  version: 2
+  one_and_two:
+    jobs:
+      - build
+      - build2
