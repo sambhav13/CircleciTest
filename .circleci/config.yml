@@ -94,7 +94,6 @@ jobs:
 
     steps:
       - checkout
-      - run: mvn clean package
       - run: echo "completed third build"
       - attach_workspace:
           at: workspace1
@@ -104,6 +103,21 @@ jobs:
           else
             echo "Nope!"; exit 1
           fi
+      - run:
+  build4:
+    docker:
+      -image: yobasystems/alpine-postgres
+    working_directory: ~/repo
+    steps:
+      - checkout:
+      - run: sudo apt-get install postgres-client-9.6
+      - run: whoami
+      - run: |
+          psql -d postgres://root@localhost/circle_test -c CREATE TABLE test(name char(25));
+      - run: |
+          psql -d postgres://root@localhost/circle_test -c INSERT INTO test VALUES('fern');
+      - run: |
+          psql -d postgres://root@localhost/circle_test -c SELECT * FROM test;
 
 
 workflows:
@@ -115,3 +129,4 @@ workflows:
       - build3:
           requires:
             - build
+      - build4
